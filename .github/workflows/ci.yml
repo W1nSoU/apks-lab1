@@ -1,0 +1,52 @@
+name: Cross-Platform CI (Ubuntu, Windows, macOS)
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - 'feature/**'
+  pull_request:
+    branches:
+      - develop
+      - master
+
+jobs:
+  build-and-test:
+    name: Build & Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: 1. Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: 2. Set up JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: 3. Make CI script executable (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: chmod +x ci.sh
+
+      - name: 4. Execute build & test via ci.sh (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: bash ./ci.sh
+
+      - name: 5. Execute build & test via ci.bat (Windows)
+        if: runner.os == 'Windows'
+        run: .\ci.bat
+
+      - name: 6. Upload built artifact (hello.jar)
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello-app-${{ matrix.os }}
+          path: target/hello.jar
+          if-no-files-found: error
+          retention-days: 7
