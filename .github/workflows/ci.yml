@@ -41,7 +41,8 @@ jobs:
 
       - name: 5. Execute build & test via ci.bat (Windows)
         if: runner.os == 'Windows'
-        run: .\ci.bat
+        shell: cmd
+        run: ci.bat
 
       - name: 6. Upload built artifact (hello.jar)
         uses: actions/upload-artifact@v4
