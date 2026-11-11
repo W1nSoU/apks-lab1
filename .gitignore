@@ -1,0 +1,26 @@
+# Maven build output
+target/
+*.class
+
+# IDE & Editor files
+.idea/
+*.iml
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+build/
+
+# Secrets, tokens and credentials
+*.key
+*.pem
+*.token
+.env
+.env.*
+secrets.*
+credentials.json
